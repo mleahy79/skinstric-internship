@@ -13,7 +13,7 @@ export default function nav() {
           </Link>
           <img
             className="h-[17px] w-1"
-            src="/rectangle 2710.svg"
+            src="/Rectangle 2710.svg"
             alt="left-bracket"
           />
           <p className="text-sm font-semibold text-[#1a1b1c83] text-opacity-70 ml-1.5 mr-1.5">
@@ -22,7 +22,7 @@ export default function nav() {
           </p>
           <img
             className="h-[17px] w-1"
-            src="/rectangle 2711.svg"
+            src="/Rectangle 2711.svg"
             alt="left-bracket"
           />
         </div>

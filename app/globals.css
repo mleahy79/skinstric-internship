@@ -9,6 +9,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-roobert);
+  --font-inter: var(--font-inter-google);
 }
 
 @media (prefers-color-scheme: dark) {
