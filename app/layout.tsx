@@ -7,8 +7,14 @@ import GridOverlay from "../components/dev/grid-overlay"
 
 
 const roobert = localFont({
-  src: '../fonts/RoobertTRIALVF-BF67243fd545701.ttf',
-  weight: '100 900',
+  src: [
+    { path: '../fonts/roobert/RoobertTRIAL-Light-BF67243fd502239.otf', weight: '300', style: 'normal' },
+    { path: '../fonts/roobert/RoobertTRIAL-Regular-BF67243fd53fdf2.otf', weight: '400', style: 'normal' },
+    { path: '../fonts/roobert/RoobertTRIAL-Medium-BF67243fd53e059.otf', weight: '500', style: 'normal' },
+    { path: '../fonts/roobert/RoobertTRIAL-SemiBold-BF67243fd54213d.otf', weight: '600', style: 'normal' },
+    { path: '../fonts/roobert/RoobertTRIAL-Bold-BF67243fd540abb.otf', weight: '700', style: 'normal' },
+    { path: '../fonts/roobert/RoobertTRIAL-Heavy-BF67243fd53e164.otf', weight: '800', style: 'normal' },
+  ],
   variable: '--font-roobert',
   display: 'swap',
 })
