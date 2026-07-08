@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import TextStep from "../components/phase-one/text-step";
 import Processing from "../components/phase-one/processing";
 import { useOnboardingStore } from "../store/onboarding";
@@ -88,6 +89,7 @@ function DiamondSection({
 }
 
 export default function Home() {
+  const router = useRouter();
   const [step, setStep] = useState<
     "hero" | "introduce" | "location" | "processing"
   >("hero");
@@ -159,9 +161,7 @@ export default function Home() {
       <Processing
         status={submitStatus}
         onBack={() => setStep("location")}
-        onProceed={() => {
-          // TODO: Phase 2 route doesn't exist yet
-        }}
+        onProceed={() => router.push("/selfie")}
       />
     );
   }
