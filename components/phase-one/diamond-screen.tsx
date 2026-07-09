@@ -1,7 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
+
+const DIAMOND_STEP = 80;
 
 export function BackButton({ onClick }: { onClick: () => void }) {
   return (
@@ -44,30 +47,60 @@ export default function DiamondScreen({
   onBack: () => void;
   children: ReactNode;
 }) {
+  const measureRef = useRef<HTMLSpanElement>(null);
+  const [baseSize, setBaseSize] = useState(604);
+
+  useEffect(() => {
+    document.fonts.ready.then(() => {
+      if (measureRef.current) {
+        setBaseSize(Math.round(measureRef.current.offsetWidth * 1.414));
+      }
+    });
+  }, []);
+
   return (
     <main className="relative min-h-[calc(100vh-4rem)] overflow-hidden px-8">
+      <span
+        ref={measureRef}
+        className="invisible absolute whitespace-pre text-[48px] leading-none font-normal tracking-tighter"
+      >
+        Where are you from?
+      </span>
+
       <p className="absolute top-0 left-8 text-sm font-semibold tracking-wide text-[#1A1B1C]">
         TO START ANALYSIS
       </p>
 
       <div className="absolute top-[42%] left-1/2 h-100 w-100 -translate-x-1/2 -translate-y-1/2">
-        <motion.div
-          className="absolute inset-0 border border-dotted border-[#A0A4AB] opacity-100"
-          initial={{ rotate: 45 }}
-          animate={{ rotate: 405 }}
-          transition={{ duration: 24, repeat: Infinity, ease: "linear" }}
-        />
-        <motion.div
-          className="absolute -inset-8 border border-dotted border-[#A0A4AB] opacity-50"
-          initial={{ rotate: 12 }}
-          animate={{ rotate: 372 }}
+        <motion.img
+          src="/Rectangle 2778 (1).svg"
+          alt=""
+          style={{ width: baseSize, height: baseSize }}
+          className="absolute top-1/2 left-1/2 max-w-none -translate-x-1/2 -translate-y-1/2"
+          initial={{ rotate: 0 }}
+          animate={{ rotate: 360 }}
           transition={{ duration: 36, repeat: Infinity, ease: "linear" }}
         />
-        <motion.div
-          className="absolute -inset-16 border border-dotted border-[#A0A4AB] opacity-25"
+        <motion.img
+          src="/Rectangle 2779 (1).svg"
+          alt=""
+          style={{ width: baseSize + DIAMOND_STEP, height: baseSize + DIAMOND_STEP }}
+          className="absolute top-1/2 left-1/2 max-w-none -translate-x-1/2 -translate-y-1/2"
+          initial={{ rotate: 12 }}
+          animate={{ rotate: 372 }}
+          transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+        />
+        <motion.img
+          src="/Rectangle 2780.svg"
+          alt=""
+          style={{
+            width: baseSize + DIAMOND_STEP * 2,
+            height: baseSize + DIAMOND_STEP * 2,
+          }}
+          className="absolute top-1/2 left-1/2 max-w-none -translate-x-1/2 -translate-y-1/2"
           initial={{ rotate: 20 }}
           animate={{ rotate: 380 }}
-          transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 66, repeat: Infinity, ease: "linear" }}
         />
       </div>
 

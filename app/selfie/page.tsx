@@ -3,6 +3,15 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { useRef, useState } from "react";
+import PhotoUpload, { type PhotoUploadHandle } from "./PhotoUpload";
+import CameraCapture from "./CameraCapture";
+import DiamondScreen, { ProceedButton } from "../../components/phase-one/diamond-screen";
+import Processing from "../../components/phase-one/processing";
+
+const PHASE_TWO_ENDPOINT =
+  "https://us-central1-frontend-simplified.cloudfunctions.net/skinstricPhaseTwo";
+const MIN_PROCESSING_MS = 1500;
 
 function CaptureOption({
   side,
@@ -19,56 +28,96 @@ function CaptureOption({
 }) {
   const isLeft = side === "left";
 
+  const smallestDiamondSize = 400;
+  const lineReach = smallestDiamondSize / (2 * Math.SQRT2);
+  const textGap = 20;
+
+  // Positive reach = extend right before rotating (camera's side);
+  // negative = extend left (gallery's side). Same rotation angle as the line itself.
+  const reach = isLeft ? lineReach : -lineReach;
+  const textReach = isLeft ? lineReach + textGap : -(lineReach + textGap);
+
+  const dotStyle = {
+    top: "50%",
+    left: "50%",
+    transform: `translate(-50%, -50%) rotate(-35deg) translateX(${reach}px)`,
+  };
+
+  // Anchor is a zero-size point placed via the same rotate+translateX trick as
+  // the dot. The visible text is a separate child so its own counter-rotation
+  // (undoing the anchor's tilt) doesn't get tangled up with that placement math.
+  const textAnchorStyle = {
+    top: "50%",
+    left: "50%",
+    transform: `rotate(-35deg) translateX(${textReach}px)`,
+  };
+
   return (
     <button
       onClick={onClick}
-      className="group relative flex h-100 w-100 shrink-0 -translate-y-12.5 cursor-pointer items-center justify-center"
+      className="group relative flex h-80 w-80 shrink-0 -translate-y-12.5 cursor-pointer items-center justify-center"
     >
-      <motion.div
-        className="absolute inset-0 border border-dotted border-[#A0A4AB] opacity-100"
-        initial={{ rotate: 45 }}
-        animate={{ rotate: 405 }}
-        transition={{ duration: 24, repeat: Infinity, ease: "linear" }}
-      />
-      <motion.div
-        className="absolute -inset-8 border border-dotted border-[#A0A4AB] opacity-50"
-        initial={{ rotate: 12 }}
-        animate={{ rotate: 372 }}
+      <motion.img
+        src="/Rectangle 2778 (1).svg"
+        alt=""
+        className="absolute top-1/2 left-1/2 h-100 w-100 max-w-none -translate-x-1/2 -translate-y-1/2 "
+        initial={{ rotate: 0 }}
+        animate={{ rotate: 360 }}
         transition={{ duration: 36, repeat: Infinity, ease: "linear" }}
       />
-      <motion.div
-        className="absolute -inset-16 border border-dotted border-[#A0A4AB] opacity-25"
-        initial={{ rotate: 20 }}
-        animate={{ rotate: 380 }}
+      <motion.img
+        src="/Rectangle 2779 (1).svg"
+        alt=""
+        className="absolute top-1/2 left-1/2 h-120 w-120 max-w-none -translate-x-1/2 -translate-y-1/2 "
+        initial={{ rotate: 12 }}
+        animate={{ rotate: 372 }}
         transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
       />
-
-      <Image
-        src={icon}
-        alt={label}
-        width={iconSize}
-        height={iconSize}
-        className="relative transition-transform duration-300 group-hover:scale-105"
+      <motion.img
+        src="/Rectangle 2780.svg"
+        alt=""
+        className="absolute top-1/2 left-1/2 h-140 w-140 max-w-none -translate-x-1/2 -translate-y-1/2 "
+        initial={{ rotate: 20 }}
+        animate={{ rotate: 380 }}
+        transition={{ duration: 66, repeat: Infinity, ease: "linear" }}
       />
 
       <div
-        className={`absolute top-1/2 h-px w-24 rotate-[-35deg] bg-[#A0A4AB] ${
+        style={{ width: iconSize, height: iconSize }}
+        className="relative z-10 overflow-hidden rounded-full transition-transform duration-300 group-hover:scale-105"
+      >
+        <Image src={icon} alt={label} width={iconSize} height={iconSize} />
+      </div>
+
+      <div
+        className={`absolute top-1/2 h-px rotate-[-35deg] bg-[#1A1B1C] ${
           isLeft ? "left-1/2 origin-left" : "right-1/2 origin-right"
         }`}
+        style={{
+          width: lineReach,
+          maskImage: `linear-gradient(to ${isLeft ? "right" : "left"}, transparent ${iconSize / 2}px, black ${iconSize / 2}px)`,
+          WebkitMaskImage: `linear-gradient(to ${isLeft ? "right" : "left"}, transparent ${iconSize / 2}px, black ${iconSize / 2}px)`,
+        }}
       />
       <span
-        className={`absolute top-1/2 h-1.5 w-1.5 -translate-y-19.5 rounded-full bg-[#A0A4AB] ${
-          isLeft ? "left-[calc(50%+1px)]" : "right-[calc(50%+1px)]"
-        }`}
+        className="absolute h-2 w-2 rounded-full border border-[#1A1B1C]"
+        style={dotStyle}
       />
 
-      <div
-        className={`absolute top-1/2 -translate-y-30 text-sm font-normal whitespace-nowrap text-[#1A1B1C] ${
-          isLeft ? "left-1/2 ml-6 text-left" : "right-1/2 mr-6 text-right"
-        }`}
-      >
-        <p>ALLOW A.I.</p>
-        <p>{label}</p>
+      <div className="absolute" style={textAnchorStyle}>
+        <div
+          className={`absolute top-0 text-sm font-normal whitespace-nowrap text-[#1A1B1C] ${
+            isLeft ? "left-0 text-left" : "right-0 text-right"
+          }`}
+          style={{
+            transform: isLeft
+              ? "translateY(calc(-50% + 40px)) rotate(35deg)"
+              : "translateY(calc(-50% - 40px)) rotate(35deg)",
+          }}
+        >
+          <p>ALLOW A.I.</p>
+          <p>{label}</p>
+        </div>
       </div>
     </button>
   );
@@ -76,6 +125,87 @@ function CaptureOption({
 
 export default function SelfiePage() {
   const router = useRouter();
+  const photoUploadRef = useRef<PhotoUploadHandle>(null);
+
+  const [step, setStep] = useState<
+    "select" | "camera" | "preview" | "processing"
+  >("select");
+  const [image, setImage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [submitStatus, setSubmitStatus] = useState<"loading" | "done">(
+    "loading",
+  );
+
+  const submitPhaseTwo = async () => {
+    if (!image) return;
+    setStep("processing");
+    setSubmitStatus("loading");
+
+    // Skinstric API wants raw base64 — strip the data URL prefix
+    const base64 = image.split(",")[1];
+
+    const minDelay = new Promise((resolve) =>
+      setTimeout(resolve, MIN_PROCESSING_MS),
+    );
+    const request = fetch(PHASE_TWO_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ image: base64 }),
+    });
+
+    await Promise.all([request, minDelay]);
+    setSubmitStatus("done");
+  };
+
+  if (step === "processing") {
+    return (
+      <Processing
+        status={submitStatus}
+        onBack={() => setStep("preview")}
+        onProceed={() => router.push("/analysis")}
+      />
+    );
+  }
+
+  if (step === "camera") {
+    return (
+      <DiamondScreen onBack={() => setStep("select")}>
+        <div className="absolute top-[42%] left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <CameraCapture
+            onCapture={(base64) => {
+              setError(null);
+              setImage(base64);
+              setStep("preview");
+            }}
+            onError={(message) => {
+              setError(message);
+              setStep("select");
+            }}
+          />
+        </div>
+      </DiamondScreen>
+    );
+  }
+
+  if (step === "preview" && image) {
+    return (
+      <DiamondScreen
+        onBack={() => {
+          setImage(null);
+          setStep("select");
+        }}
+      >
+        <div className="absolute top-[42%] left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <img
+            src={image}
+            alt="Selected photo preview"
+            className="h-64 w-64 rounded-full object-cover"
+          />
+        </div>
+        <ProceedButton onClick={submitPhaseTwo} />
+      </DiamondScreen>
+    );
+  }
 
   return (
     <main className="relative flex min-h-[calc(100vh-4rem)] items-center justify-center gap-100 overflow-hidden px-8">
@@ -83,25 +213,37 @@ export default function SelfiePage() {
         TO START ANALYSIS
       </p>
 
+      <PhotoUpload
+        ref={photoUploadRef}
+        onSelect={(base64) => {
+          setError(null);
+          setImage(base64);
+          setStep("preview");
+        }}
+        onError={setError}
+      />
+
       <CaptureOption
         side="left"
         icon="/camera.svg"
         iconSize={136}
         label="TO SCAN YOUR FACE"
-        onClick={() => {
-          // TODO: camera capture flow (Phase 3) not built yet
-        }}
+        onClick={() => setStep("camera")}
       />
 
       <CaptureOption
         side="right"
-        icon="/gallery.svg"
-        iconSize={120}
+        icon="/gallery-icon2.svg"
+        iconSize={136}
         label="ACCESS GALLERY"
-        onClick={() => {
-          // TODO: gallery upload flow (Phase 2) not built yet
-        }}
+        onClick={() => photoUploadRef.current?.open()}
       />
+
+      {error && (
+        <p className="absolute bottom-20 left-1/2 -translate-x-1/2 text-sm text-red-600">
+          {error}
+        </p>
+      )}
 
       <button
         onClick={() => router.push("/")}
