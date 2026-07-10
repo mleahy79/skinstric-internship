@@ -3,8 +3,8 @@
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import TextStep from "../components/phase-one/text-step";
-import Processing from "../components/phase-one/processing";
+import TextStep from "../components/phase-one/TextStep";
+import Processing from "../components/phase-one/Processing";
 import { useOnboardingStore } from "../store/onboarding";
 
 const PHASE_ONE_ENDPOINT =

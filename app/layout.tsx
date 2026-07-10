@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import localFont from 'next/font/local'
 import { Inter } from 'next/font/google'
-import Nav from "../components/nav/page"
-import GridOverlay from "../components/dev/grid-overlay"
+import Nav from "../components/Nav"
+import GridOverlay from "../components/dev/GridOverlay"
 
 
 const roobert = localFont({

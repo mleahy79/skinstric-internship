@@ -2,7 +2,7 @@
 
 import { AnimatePresence } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import DiamondScreen, { ProceedButton } from "./diamond-screen";
+import DiamondScreen, { ProceedButton } from "./DiamondScreen";
 
 const VALID_TEXT = /^[a-zA-Z\s'-]+$/;
 

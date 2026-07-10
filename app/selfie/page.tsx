@@ -1,13 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import PhotoUpload, { type PhotoUploadHandle } from "./PhotoUpload";
 import CameraCapture from "./CameraCapture";
-import DiamondScreen, { ProceedButton } from "../../components/phase-one/diamond-screen";
-import Processing from "../../components/phase-one/processing";
+import DiamondScreen, { ProceedButton } from "../../components/phase-one/DiamondScreen";
+import Processing from "../../components/phase-one/Processing";
+import { useAnalysisStore } from "../../store/analysis";
 
 const PHASE_TWO_ENDPOINT =
   "https://us-central1-frontend-simplified.cloudfunctions.net/skinstricPhaseTwo";
@@ -60,7 +61,7 @@ function CaptureOption({
       <motion.img
         src="/Rectangle 2778 (1).svg"
         alt=""
-        className="absolute top-1/2 left-1/2 h-100 w-100 max-w-none -translate-x-1/2 -translate-y-1/2 "
+        className="pointer-events-none absolute top-1/2 left-1/2 h-100 w-100 max-w-none -translate-x-1/2 -translate-y-1/2 "
         initial={{ rotate: 0 }}
         animate={{ rotate: 360 }}
         transition={{ duration: 36, repeat: Infinity, ease: "linear" }}
@@ -68,7 +69,7 @@ function CaptureOption({
       <motion.img
         src="/Rectangle 2779 (1).svg"
         alt=""
-        className="absolute top-1/2 left-1/2 h-120 w-120 max-w-none -translate-x-1/2 -translate-y-1/2 "
+        className="pointer-events-none absolute top-1/2 left-1/2 h-120 w-120 max-w-none -translate-x-1/2 -translate-y-1/2 "
         initial={{ rotate: 12 }}
         animate={{ rotate: 372 }}
         transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
@@ -76,7 +77,7 @@ function CaptureOption({
       <motion.img
         src="/Rectangle 2780.svg"
         alt=""
-        className="absolute top-1/2 left-1/2 h-140 w-140 max-w-none -translate-x-1/2 -translate-y-1/2 "
+        className="pointer-events-none absolute top-1/2 left-1/2 h-140 w-140 max-w-none -translate-x-1/2 -translate-y-1/2 "
         initial={{ rotate: 20 }}
         animate={{ rotate: 380 }}
         transition={{ duration: 66, repeat: Infinity, ease: "linear" }}
@@ -123,13 +124,48 @@ function CaptureOption({
   );
 }
 
+function CameraAuthPopup({
+  onAllow,
+  onDeny,
+}: {
+  onAllow: () => void;
+  onDeny: () => void;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 8 }}
+      transition={{ duration: 0.2, ease: "easeOut" }}
+      className="absolute top-1/2 left-full z-20 ml-12 w-125 translate-y-[-35%] bg-[#1A1B1C] text-[#FCFCFC]"
+    >
+      <p className="px-8 pt-8 pb-10 text-sm font-semibold tracking-wide uppercase">
+        Allow A.I. to access your camera
+      </p>
+      <div className="flex items-center justify-end gap-8 border-t border-white/20 px-8 py-5 text-sm font-semibold">
+        <button
+          onClick={onDeny}
+          className="cursor-pointer text-white/40 duration-200 hover:text-white/70"
+        >
+          DENY
+        </button>
+        <button onClick={onAllow} className="cursor-pointer duration-200 hover:opacity-70">
+          ALLOW
+        </button>
+      </div>
+    </motion.div>
+  );
+}
+
 export default function SelfiePage() {
   const router = useRouter();
   const photoUploadRef = useRef<PhotoUploadHandle>(null);
+  const setResult = useAnalysisStore((state) => state.setResult);
 
   const [step, setStep] = useState<
     "select" | "camera" | "preview" | "processing"
   >("select");
+  const [showCameraAuth, setShowCameraAuth] = useState(false);
   const [image, setImage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [submitStatus, setSubmitStatus] = useState<"loading" | "done">(
@@ -151,9 +187,10 @@ export default function SelfiePage() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ image: base64 }),
-    });
+    }).then((res) => res.json());
 
-    await Promise.all([request, minDelay]);
+    const [demographics] = await Promise.all([request, minDelay]);
+    setResult(image, demographics);
     setSubmitStatus("done");
   };
 
@@ -223,13 +260,27 @@ export default function SelfiePage() {
         onError={setError}
       />
 
-      <CaptureOption
-        side="left"
-        icon="/camera.svg"
-        iconSize={136}
-        label="TO SCAN YOUR FACE"
-        onClick={() => setStep("camera")}
-      />
+      <div className="relative">
+        <CaptureOption
+          side="left"
+          icon="/camera.svg"
+          iconSize={136}
+          label="TO SCAN YOUR FACE"
+          onClick={() => setShowCameraAuth(true)}
+        />
+
+        <AnimatePresence>
+          {showCameraAuth && (
+            <CameraAuthPopup
+              onAllow={() => {
+                setShowCameraAuth(false);
+                setStep("camera");
+              }}
+              onDeny={() => setShowCameraAuth(false)}
+            />
+          )}
+        </AnimatePresence>
+      </div>
 
       <CaptureOption
         side="right"
