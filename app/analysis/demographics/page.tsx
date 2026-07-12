@@ -35,8 +35,7 @@ export default function DemographicsPage() {
     return edits[category]?.[label] ?? aiScore * 100;
   }
 
-  // Age has a natural chronological order and always stays in it, regardless of edits.
-  // Race/Sex have no inherent order, so they rank by confidence (re-sorting only on submit).
+  
   function sortedEntries(category: Category) {
     const entries = Object.entries(
       demographics?.data[category as keyof DemographicsData] ?? {},
@@ -81,13 +80,13 @@ export default function DemographicsPage() {
 
   return (
     <main className="relative min-h-[calc(100vh-4rem)] px-8">
-      <p className="absolute top-0 left-8 text-base font-semibold mb-4 tracking-wide leading-[24px] text-[#1A1B1C]">
+      <p className="absolute top-0 left-8 text-base font-semibold mb-4 tracking-wide leading-6 text-[#1A1B1C]">
         A. I. ANALYSIS
       </p>
-      <h1 className="text-4xl md:text-7xl pt-4 mt-3 font-normal tracking-tighter leading-[64px]">
+      <h1 className="text-4xl md:text-7xl pt-4 mt-3 font-normal tracking-tighter leading-16">
         DEMOGRAPHICS
       </h1>
-      <h2 className="text-sm mt-2 leading-[24px]">PREDICTED RACE &amp; AGE</h2>
+      <h2 className="text-sm mt-2 leading-6">PREDICTED RACE &amp; AGE</h2>
 
     <div className="w-full min-h-136 pb-10 mt-24">
 
@@ -104,8 +103,8 @@ export default function DemographicsPage() {
                   onClick={() => setActiveFilter(filter.key)}
                   className={
                     filter.key === activeFilter
-                      ? "w-full h-[104px] flex flex-col justify-between text-left px-2 py-4 bg-black text-white cursor-pointer border-t border-[#1a1b1c] text-sm font-semibold"
-                      : "w-full h-[104px] flex flex-col justify-between text-left px-2 py-4 bg-gray-100 hover:bg-gray-200 cursor-pointer border-t border-[#1a1b1c] text-sm font-semibold"
+                      ? "w-full h-26 flex flex-col justify-between text-left px-2 py-4 bg-black text-white cursor-pointer border-t border-[#1a1b1c] text-sm font-semibold"
+                      : "w-full h-26 flex flex-col justify-between text-left px-2 py-4 bg-gray-100 hover:bg-gray-200 cursor-pointer border-t border-[#1a1b1c] text-sm font-semibold"
                   }
                 >
                   <span className="block">{formatLabel(selectedLabel)}</span>
