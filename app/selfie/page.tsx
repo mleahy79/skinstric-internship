@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import PhotoUpload, { type PhotoUploadHandle } from "./PhotoUpload";
 import CameraCapture from "./CameraCapture";
-import DiamondScreen, { ProceedButton } from "../../components/phase-one/DiamondScreen";
+import DiamondScreen, { BackButton, ProceedButton } from "../../components/phase-one/DiamondScreen";
+import { CameraTips } from "../../components/phase-one/CameraTips";
 import Processing from "../../components/phase-one/Processing";
 import { useAnalysisStore } from "../../store/analysis";
 
@@ -167,6 +168,9 @@ export default function SelfiePage() {
   >("select");
   const [showCameraAuth, setShowCameraAuth] = useState(false);
   const [image, setImage] = useState<string | null>(null);
+  const [captureSource, setCaptureSource] = useState<"camera" | "gallery" | null>(
+    null,
+  );
   const [error, setError] = useState<string | null>(null);
   const [submitStatus, setSubmitStatus] = useState<"loading" | "done">(
     "loading",
@@ -206,21 +210,52 @@ export default function SelfiePage() {
 
   if (step === "camera") {
     return (
-      <DiamondScreen onBack={() => setStep("select")}>
-        <div className="absolute top-[42%] left-1/2 -translate-x-1/2 -translate-y-1/2">
-          <CameraCapture
-            onCapture={(base64) => {
-              setError(null);
-              setImage(base64);
-              setStep("preview");
-            }}
-            onError={(message) => {
-              setError(message);
-              setStep("select");
-            }}
-          />
+      <main className="relative min-h-[calc(100vh-4rem)] overflow-hidden">
+        <p className="absolute top-0 left-8 z-10 text-sm font-semibold tracking-wide text-[#1A1B1C]">
+          TO START ANALYSIS
+        </p>
+        <CameraCapture
+          onCapture={(base64) => {
+            setError(null);
+            setCaptureSource("camera");
+            setImage(base64);
+            setStep("preview");
+          }}
+          onError={(message) => {
+            setError(message);
+            setStep("select");
+          }}
+        />
+        <BackButton onClick={() => setStep("select")} />
+      </main>
+    );
+  }
+
+  if (step === "preview" && image && captureSource === "camera") {
+    return (
+      <main className="relative min-h-[calc(100vh-4rem)] overflow-hidden">
+        <p className="absolute top-0 left-8 z-10 text-sm font-semibold tracking-wide text-[#1A1B1C]">
+          TO START ANALYSIS
+        </p>
+        <img
+          src={image}
+          alt="Captured selfie preview"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <p className="absolute top-24 left-1/2 -translate-x-1/2 text-sm font-semibold tracking-wide text-white">
+          GREAT SHOT!
+        </p>
+        <div className="absolute bottom-24 left-1/2 -translate-x-1/2">
+          <CameraTips light />
         </div>
-      </DiamondScreen>
+        <BackButton
+          onClick={() => {
+            setImage(null);
+            setStep("select");
+          }}
+        />
+        <ProceedButton onClick={submitPhaseTwo} />
+      </main>
     );
   }
 
@@ -254,6 +289,7 @@ export default function SelfiePage() {
         ref={photoUploadRef}
         onSelect={(base64) => {
           setError(null);
+          setCaptureSource("gallery");
           setImage(base64);
           setStep("preview");
         }}
