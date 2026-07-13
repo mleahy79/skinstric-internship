@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { BackButton } from "../../components/phase-one/DiamondScreen";
-import { useAnalysisStore } from "../../store/analysis";
 
 type HoverZone = "top" | "side" | "bottom" | null;
 
@@ -22,8 +21,6 @@ function GetSummaryButton() {
 
 export default function SelectAnalysis() {
   const router = useRouter();
-  const image = useAnalysisStore((state) => state.image);
-  const demographics = useAnalysisStore((state) => state.demographics);
   const [hoverZone, setHoverZone] = useState<HoverZone>(null);
 
   return (
@@ -41,21 +38,21 @@ export default function SelectAnalysis() {
         <img
           src="/Rectangle 2778 (1).svg"
           alt=""
-          className={`pointer-events-none absolute top-1/2 left-1/2 h-140 w-140 max-w-none -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 ${
+          className={`pointer-events-none absolute top-1/2 left-1/2 h-[min(35rem,75vw)] w-[min(35rem,75vw)] max-w-none -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 ${
             hoverZone === "top" ? "opacity-100" : "opacity-0"
           }`}
         />
         <img
           src="/Rectangle 2779 (1).svg"
           alt=""
-          className={`pointer-events-none absolute top-1/2 left-1/2 h-160 w-160 max-w-none -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 ${
+          className={`pointer-events-none absolute top-1/2 left-1/2 h-[min(40rem,75vw)] w-[min(40rem,75vw)] max-w-none -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 ${
             hoverZone === "side" ? "opacity-100" : "opacity-0"
           }`}
         />
         <img
           src="/Rectangle 2780.svg"
           alt=""
-          className={`pointer-events-none absolute top-1/2 left-1/2 h-180 w-180 max-w-none -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 ${
+          className={`pointer-events-none absolute top-1/2 left-1/2 h-[min(45rem,75vw)] w-[min(45rem,75vw)] max-w-none -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 ${
             hoverZone === "bottom" ? "opacity-100" : "opacity-0"
           }`}
         />
@@ -65,9 +62,9 @@ export default function SelectAnalysis() {
             href="/analysis/demographics"
             onMouseEnter={() => setHoverZone("top")}
             onMouseLeave={() => setHoverZone(null)}
-            className="relative flex h-40 w-40 items-center justify-center bg-gray-100 shadow-inner hover:bg-gray-200 hover:scale-105"
+            className="relative flex h-[clamp(5.5rem,24vw,10rem)] w-[clamp(5.5rem,24vw,10rem)] items-center justify-center bg-gray-100 shadow-inner hover:bg-gray-200 hover:scale-105"
           >
-            <span className="absolute -rotate-45 cursor-pointer text-center text-sm font-semibold text-[#1A1B1C]">
+            <span className="absolute -rotate-45 cursor-pointer text-center text-[clamp(0.625rem,2.8vw,0.875rem)] font-semibold whitespace-nowrap text-[#1A1B1C]">
               DEMOGRAPHICS
             </span>
           </Link>
@@ -75,9 +72,9 @@ export default function SelectAnalysis() {
           <div
             onMouseEnter={() => setHoverZone("side")}
             onMouseLeave={() => setHoverZone(null)}
-            className="relative flex h-40 w-40 cursor-default items-center justify-center bg-gray-100 shadow-inner hover:bg-gray-200"
+            className="relative flex h-[clamp(5.5rem,24vw,10rem)] w-[clamp(5.5rem,24vw,10rem)] cursor-default items-center justify-center bg-gray-100 shadow-inner hover:bg-gray-200"
           >
-            <span className="absolute -rotate-45 text-center text-sm leading-5 font-semibold text-[#1A1B1C]">
+            <span className="absolute -rotate-45 text-center text-[clamp(0.625rem,2.8vw,0.875rem)] leading-5 font-semibold text-[#1A1B1C]">
               COSMETIC
               <br />
               CONCERNS
@@ -87,9 +84,9 @@ export default function SelectAnalysis() {
           <div
             onMouseEnter={() => setHoverZone("side")}
             onMouseLeave={() => setHoverZone(null)}
-            className="relative flex h-40 w-40 cursor-default items-center justify-center shadow-inner bg-gray-100 hover:bg-gray-200"
+            className="relative flex h-[clamp(5.5rem,24vw,10rem)] w-[clamp(5.5rem,24vw,10rem)] cursor-default items-center justify-center shadow-inner bg-gray-100 hover:bg-gray-200"
           >
-            <span className="absolute -rotate-45 text-center text-sm leading-5 font-semibold text-[#1A1B1C]">
+            <span className="absolute -rotate-45 text-center text-[clamp(0.625rem,2.8vw,0.875rem)] leading-5 font-semibold text-[#1A1B1C]">
               SKIN TYPE
               <br />
               DETAILS
@@ -99,9 +96,9 @@ export default function SelectAnalysis() {
           <div
             onMouseEnter={() => setHoverZone("bottom")}
             onMouseLeave={() => setHoverZone(null)}
-            className="relative flex h-40 w-40 cursor-default items-center justify-center shadow-inner bg-gray-100 hover:bg-gray-200"
+            className="relative flex h-[clamp(5.5rem,24vw,10rem)] w-[clamp(5.5rem,24vw,10rem)] cursor-default items-center justify-center shadow-inner bg-gray-100 hover:bg-gray-200"
           >
-            <span className="absolute -rotate-45 text-center text-sm font-semibold text-[#1A1B1C]">
+            <span className="absolute -rotate-45 text-center text-[clamp(0.625rem,2.8vw,0.875rem)] font-semibold whitespace-nowrap text-[#1A1B1C]">
               WEATHER
             </span>
           </div>

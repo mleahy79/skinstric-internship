@@ -16,7 +16,7 @@ export function BackButton({ onClick }: { onClick: () => void }) {
         <span className="absolute inset-0 rotate-45 border border-solid border-black duration-300 group-hover:scale-110" />
         <span className="h-0 w-0 rotate-180 border-y-[6px] border-l-8 border-y-transparent border-l-black duration-300 group-hover:scale-105" />
       </span>
-      BACK
+      <span className="hidden sm:inline">BACK</span>
     </button>
   );
 }

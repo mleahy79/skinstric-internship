@@ -19,6 +19,133 @@ const FILTERS = [
 
 type Category = (typeof FILTERS)[number]["key"];
 
+function CategoryCard({
+  filterLabel,
+  isActive,
+  predictedLabel,
+  score,
+  onSelect,
+}: {
+  filterLabel: string;
+  isActive: boolean;
+  predictedLabel: string;
+  score: number;
+  onSelect: () => void;
+}) {
+  return (
+    <button
+      onClick={onSelect}
+      className={`block w-full cursor-pointer border-t border-[#1a1b1c] p-6 text-left ${
+        isActive
+          ? "bg-black text-white"
+          : "bg-gray-100 text-gray-900 hover:bg-gray-200"
+      }`}
+    >
+      <div className="flex items-center justify-between text-sm font-semibold uppercase">
+        <span>{predictedLabel}</span>
+        <span className={isActive ? "text-white/50" : "text-gray-400"}>
+          {filterLabel}
+        </span>
+      </div>
+      <div className="flex justify-center py-6">
+        <ProgressCircle
+          percentage={score}
+          size={240}
+          strokeWidth={2}
+          light={isActive}
+        />
+      </div>
+      <span className="block text-center text-xs font-semibold tracking-wider">
+        EDIT
+      </span>
+    </button>
+  );
+}
+
+function ConfidenceTable({
+  filterLabel,
+  activeLabel,
+  entries,
+  confirmed,
+  onSelectLabel,
+  onEditValue,
+  scoreFor,
+}: {
+  filterLabel: string;
+  activeLabel: string;
+  entries: [string, number][];
+  confirmed: boolean;
+  onSelectLabel: (label: string) => void;
+  onEditValue: (label: string, value: number) => void;
+  scoreFor: (label: string, aiScore: number) => number;
+}) {
+  const draftInputRef = useRef<HTMLInputElement>(null);
+
+  function commitEdit() {
+    const parsed = Number(draftInputRef.current?.value);
+    if (!Number.isNaN(parsed)) {
+      onEditValue(activeLabel, Math.min(100, Math.max(0, parsed)));
+    }
+  }
+
+  return (
+    <div className="h-full border-t border-[#1a1b1c] bg-gray-100 p-4">
+      <div className="mb-3 flex justify-between pb-2 text-xs font-bold tracking-wider text-gray-400">
+        <span>{filterLabel.toUpperCase()}</span>
+        <span>A.I. CONFIDENCE</span>
+      </div>
+      <div className="space-y-3 text-sm">
+        {entries.map(([label, score]) => {
+          const isActive = label === activeLabel;
+          const displayScore = scoreFor(label, score);
+          return (
+            <div
+              key={label}
+              className={
+                isActive
+                  ? "flex w-full items-center justify-between rounded bg-black p-2 text-white"
+                  : "flex w-full items-center justify-between px-2 text-gray-600"
+              }
+            >
+              <button
+                onClick={() => onSelectLabel(label)}
+                disabled={confirmed}
+                className={
+                  isActive
+                    ? "cursor-pointer font-medium disabled:cursor-not-allowed"
+                    : "cursor-pointer hover:text-gray-900 disabled:cursor-not-allowed"
+                }
+              >
+                {isActive ? "✦" : "◇"} {formatLabel(label)}
+              </button>
+              {isActive && !confirmed ? (
+                <input
+                  ref={draftInputRef}
+                  type="number"
+                  step={0.01}
+                  min={0}
+                  max={100}
+                  defaultValue={displayScore.toFixed(2)}
+                  onBlur={commitEdit}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      commitEdit();
+                      e.currentTarget.blur();
+                    }
+                  }}
+                  className="w-16 border-b border-white/40 bg-transparent text-right font-mono outline-none"
+                />
+              ) : (
+                <span className="font-mono">{displayScore.toFixed(2)}%</span>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export default function DemographicsPage() {
   const router = useRouter();
   const demographics = useAnalysisStore((state) => state.demographics);
@@ -90,7 +217,40 @@ export default function DemographicsPage() {
 
     <div className="w-full min-h-136 pb-10 mt-24">
 
-      <div className="grid grid-cols-1 md:grid-cols-[1.5fr_8.5fr_3.15fr] flex-1 gap-4  mx-auto">
+      {/* 420px - 959px: stacked category cards + confidence table */}
+      <div className="desktop:hidden grid grid-cols-1 cards:grid-cols-[1.5fr_2fr] gap-4">
+        <div>
+          {FILTERS.map((filter) => {
+            const { label, score } = activeEntryFor(filter.key);
+            return (
+              <CategoryCard
+                key={filter.key}
+                filterLabel={filter.label.toUpperCase()}
+                predictedLabel={formatLabel(label)}
+                score={score}
+                isActive={filter.key === activeFilter}
+                onSelect={() => setActiveFilter(filter.key)}
+              />
+            );
+          })}
+        </div>
+        <ConfidenceTable
+          filterLabel={
+            FILTERS.find((filter) => filter.key === activeFilter)!.label
+          }
+          activeLabel={activeLabel}
+          entries={activeEntries}
+          confirmed={confirmed}
+          onSelectLabel={(label) => selectLabel(activeFilter, label)}
+          onEditValue={(label, value) =>
+            setEditValue(activeFilter, label, value)
+          }
+          scoreFor={(label, aiScore) => scoreFor(activeFilter, label, aiScore)}
+        />
+      </div>
+
+      {/* 960px+: existing tab-switcher layout */}
+      <div className="hidden desktop:grid desktop:grid-cols-[1.5fr_8.5fr_3.15fr] flex-1 gap-4  mx-auto">
 
         {/* Left Column: Filter Menu */}
         <div className=" border-[#1a1b1c]">

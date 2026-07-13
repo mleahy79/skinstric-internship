@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function nav() {
+export default function Nav() {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
   return (
     <main>
       <header className="flex flex-row justify-between py-3 mb-3 relative w-full h-16 z-1000">

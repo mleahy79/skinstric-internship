@@ -13,6 +13,20 @@ const MIN_PROCESSING_MS = 1500;
 
 const BASE_SHIFT = 572;
 
+function DiamondButtonIcon({ isLeft }: { isLeft: boolean }) {
+  return (
+    <span className="relative flex h-7.5 w-7.5 items-center justify-center duration-300 group-hover:scale-105">
+      <span className="absolute inset-0 rotate-45 border border-solid border-black duration-300 group-hover:scale-110" />
+      <span className="absolute inset-1.5 rotate-45 border border-dotted border-black opacity-0 duration-300 group-hover:scale-110 group-hover:opacity-100" />
+      <span
+        className={`h-0 w-0 border-y-[6px] border-l-8 border-y-transparent border-l-black duration-300 group-hover:scale-105 ${
+          isLeft ? "rotate-180" : ""
+        }`}
+      />
+    </span>
+  );
+}
+
 function DiamondSection({
   side,
   label,
@@ -35,18 +49,6 @@ function DiamondSection({
   const buttonEdgePosition = isLeft ? "left-8" : "right-8";
   const opacityClass = hidden ? "opacity-0" : "opacity-100";
 
-  const icon = (
-    <span className="relative flex h-7.5 w-7.5 items-center justify-center duration-300 group-hover:scale-105">
-      <span className="absolute inset-0 rotate-45 border border-solid border-black duration-300 group-hover:scale-110" />
-      <span className="absolute inset-1.5 rotate-45 border border-dotted border-black opacity-0 duration-300 group-hover:scale-110 group-hover:opacity-100" />
-      <span
-        className={`h-0 w-0 border-y-[6px] border-l-8 border-y-transparent border-l-black duration-300 group-hover:scale-105 ${
-          isLeft ? "rotate-180" : ""
-        }`}
-      />
-    </span>
-  );
-
   return (
     <>
       <div
@@ -67,20 +69,20 @@ function DiamondSection({
         />
       </div>
       <button
-        className={`group fixed top-1/2 ${buttonEdgePosition} h-9 -translate-y-1/2 inline-flex cursor-pointer items-center justify-center gap-4 whitespace-nowrap rounded-md px-3 py-1 text-sm font-normal text-[#1A1B1C] transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:opacity-50 ${opacityClass} transition-opacity duration-500 ease-in-out`}
+        className={`group fixed top-1/2 ${buttonEdgePosition} hidden tablet:inline-flex h-9 -translate-y-1/2 cursor-pointer items-center justify-center gap-4 whitespace-nowrap rounded-md px-3 py-1 text-sm font-normal text-[#1A1B1C] transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:opacity-50 ${opacityClass} transition-opacity duration-500 ease-in-out`}
         onMouseEnter={onHover}
         onMouseLeave={onLeave}
         onClick={onClick}
       >
         {isLeft ? (
           <>
-            {icon}
+            <DiamondButtonIcon isLeft={isLeft} />
             <span>{label}</span>
           </>
         ) : (
           <>
             <span>{label}</span>
-            {icon}
+            <DiamondButtonIcon isLeft={isLeft} />
           </>
         )}
       </button>
@@ -185,6 +187,12 @@ export default function Home() {
         hidden={hoverSide === "left"}
         active={hoverSide === "right"}
       />
+      <div
+        aria-hidden
+        className="pointer-events-none fixed top-1/2 left-1/2 aspect-square w-[85vw] max-w-100 -translate-x-1/2 -translate-y-1/2 lg:hidden"
+      >
+        <div className="absolute inset-0 rotate-45 border border-dotted border-[#A0A4AB]" />
+      </div>
       <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-8 w-auto h-auto text-center">
         <div>
           <h1 className="text-[60px] text-[#1A1B1C] lg:text-[105px] font-light tracking-[-0.07em] leading-[0.9375]">
@@ -220,8 +228,25 @@ export default function Home() {
             </motion.span>
           </h1>
         </div>
+        <div className="mt-8 flex flex-col items-center gap-2 tablet:hidden">
+          <button className="group inline-flex h-9 cursor-pointer items-center justify-center gap-4 whitespace-nowrap rounded-md px-3 py-1 text-sm font-normal text-[#1A1B1C]">
+            <DiamondButtonIcon isLeft />
+            <span>DISCOVER A.I.</span>
+          </button>
+          <button
+            onClick={() => setStep("introduce")}
+            className="group inline-flex h-9 cursor-pointer items-center justify-center gap-4 whitespace-nowrap rounded-md px-3 py-1 text-sm font-normal text-[#1A1B1C]"
+          >
+            <span>TAKE TEST</span>
+            <DiamondButtonIcon isLeft={false} />
+          </button>
+        </div>
+        <p className="mt-6 max-w-70 mx-auto text-sm font-normal uppercase leading-6 tracking-normal text-[#1A1B1C] tablet:hidden">
+          Skinstric developed an A.I. that creates a highly-personalized
+          routine tailored to what your skin needs.
+        </p>
       </div>
-      <p className="fixed bottom-15.5 left-14.25 w-79 h-18 text-sm font-normal uppercase leading-6 tracking-normal text-[#1A1B1C]">
+      <p className="fixed bottom-15.5 left-14.25 hidden w-79 h-18 text-sm font-normal uppercase leading-6 tracking-normal text-[#1A1B1C] tablet:block">
         Skinstric developed an A.I. that creates a highly-personalized routine
         tailored to what your skin needs.
       </p>

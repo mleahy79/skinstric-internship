@@ -45,9 +45,6 @@ function CaptureOption({
     transform: `translate(-50%, -50%) rotate(-35deg) translateX(${reach}px)`,
   };
 
-  // Anchor is a zero-size point placed via the same rotate+translateX trick as
-  // the dot. The visible text is a separate child so its own counter-rotation
-  // (undoing the anchor's tilt) doesn't get tangled up with that placement math.
   const textAnchorStyle = {
     top: "50%",
     left: "50%",
@@ -55,73 +52,116 @@ function CaptureOption({
   };
 
   return (
-    <button
-      onClick={onClick}
-      className="group relative flex h-80 w-80 shrink-0 -translate-y-12.5 cursor-pointer items-center justify-center"
-    >
-      <motion.img
-        src="/Rectangle 2778 (1).svg"
-        alt=""
-        className="pointer-events-none absolute top-1/2 left-1/2 h-100 w-100 max-w-none -translate-x-1/2 -translate-y-1/2 "
-        initial={{ rotate: 0 }}
-        animate={{ rotate: 360 }}
-        transition={{ duration: 36, repeat: Infinity, ease: "linear" }}
-      />
-      <motion.img
-        src="/Rectangle 2779 (1).svg"
-        alt=""
-        className="pointer-events-none absolute top-1/2 left-1/2 h-120 w-120 max-w-none -translate-x-1/2 -translate-y-1/2 "
-        initial={{ rotate: 12 }}
-        animate={{ rotate: 372 }}
-        transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
-      />
-      <motion.img
-        src="/Rectangle 2780.svg"
-        alt=""
-        className="pointer-events-none absolute top-1/2 left-1/2 h-140 w-140 max-w-none -translate-x-1/2 -translate-y-1/2 "
-        initial={{ rotate: 20 }}
-        animate={{ rotate: 380 }}
-        transition={{ duration: 66, repeat: Infinity, ease: "linear" }}
-      />
-
-      <div
-        style={{ width: iconSize, height: iconSize }}
-        className="relative z-10 overflow-hidden rounded-full transition-transform duration-300 group-hover:scale-105"
+    <>
+      {/* Mobile: stacked, label centered below the icon */}
+      <button
+        onClick={onClick}
+        className="group relative flex h-56 w-56 shrink-0 cursor-pointer flex-col items-center justify-center gap-3 sm:hidden"
       >
-        <Image src={icon} alt={label} width={iconSize} height={iconSize} />
-      </div>
+        <div className="relative flex h-36 w-36 items-center justify-center">
+          <motion.img
+            src="/Rectangle 2778 (1).svg"
+            alt=""
+            className="pointer-events-none absolute top-1/2 left-1/2 h-44 w-44 max-w-none -translate-x-1/2 -translate-y-1/2"
+            initial={{ rotate: 0 }}
+            animate={{ rotate: 360 }}
+            transition={{ duration: 36, repeat: Infinity, ease: "linear" }}
+          />
+          <motion.img
+            src="/Rectangle 2779 (1).svg"
+            alt=""
+            className="pointer-events-none absolute top-1/2 left-1/2 h-52 w-52 max-w-none -translate-x-1/2 -translate-y-1/2"
+            initial={{ rotate: 12 }}
+            animate={{ rotate: 372 }}
+            transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+          />
+          <motion.img
+            src="/Rectangle 2780.svg"
+            alt=""
+            className="pointer-events-none absolute top-1/2 left-1/2 h-60 w-60 max-w-none -translate-x-1/2 -translate-y-1/2"
+            initial={{ rotate: 20 }}
+            animate={{ rotate: 380 }}
+            transition={{ duration: 66, repeat: Infinity, ease: "linear" }}
+          />
+          <div className="relative z-10 h-24 w-24 overflow-hidden rounded-full transition-transform duration-300 group-hover:scale-105">
+            <Image src={icon} alt={label} width={96} height={96} />
+          </div>
+        </div>
+        <p className="text-center text-sm font-normal text-[#1A1B1C]">
+          <span className="block">ALLOW A.I.</span>
+          <span className="block">{label}</span>
+        </p>
+      </button>
 
-      <div
-        className={`absolute top-1/2 h-px rotate-[-35deg] bg-[#1A1B1C] ${
-          isLeft ? "left-1/2 origin-left" : "right-1/2 origin-right"
-        }`}
-        style={{
-          width: lineReach,
-          maskImage: `linear-gradient(to ${isLeft ? "right" : "left"}, transparent ${iconSize / 2}px, black ${iconSize / 2}px)`,
-          WebkitMaskImage: `linear-gradient(to ${isLeft ? "right" : "left"}, transparent ${iconSize / 2}px, black ${iconSize / 2}px)`,
-        }}
-      />
-      <span
-        className="absolute h-2 w-2 rounded-full border border-[#1A1B1C]"
-        style={dotStyle}
-      />
+      {/* Tablet/desktop: full-size diagonal line + offset label (stacked below xl, row at xl+) */}
+      <button
+        onClick={onClick}
+        className="group relative hidden h-80 w-80 shrink-0 -translate-y-12.5 cursor-pointer items-center justify-center sm:flex"
+      >
+        <motion.img
+          src="/Rectangle 2778 (1).svg"
+          alt=""
+          className="pointer-events-none absolute top-1/2 left-1/2 h-100 w-100 max-w-none -translate-x-1/2 -translate-y-1/2 "
+          initial={{ rotate: 0 }}
+          animate={{ rotate: 360 }}
+          transition={{ duration: 36, repeat: Infinity, ease: "linear" }}
+        />
+        <motion.img
+          src="/Rectangle 2779 (1).svg"
+          alt=""
+          className="pointer-events-none absolute top-1/2 left-1/2 h-120 w-120 max-w-none -translate-x-1/2 -translate-y-1/2 "
+          initial={{ rotate: 12 }}
+          animate={{ rotate: 372 }}
+          transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+        />
+        <motion.img
+          src="/Rectangle 2780.svg"
+          alt=""
+          className="pointer-events-none absolute top-1/2 left-1/2 h-140 w-140 max-w-none -translate-x-1/2 -translate-y-1/2 "
+          initial={{ rotate: 20 }}
+          animate={{ rotate: 380 }}
+          transition={{ duration: 66, repeat: Infinity, ease: "linear" }}
+        />
 
-      <div className="absolute" style={textAnchorStyle}>
         <div
-          className={`absolute top-0 text-sm font-normal whitespace-nowrap text-[#1A1B1C] ${
-            isLeft ? "left-0 text-left" : "right-0 text-right"
+          style={{ width: iconSize, height: iconSize }}
+          className="relative z-10 overflow-hidden rounded-full transition-transform duration-300 group-hover:scale-105"
+        >
+          <Image src={icon} alt={label} width={iconSize} height={iconSize} />
+        </div>
+
+        <div
+          className={`absolute top-1/2 h-px rotate-[-35deg] bg-[#1A1B1C] ${
+            isLeft ? "left-1/2 origin-left" : "right-1/2 origin-right"
           }`}
           style={{
-            transform: isLeft
-              ? "translateY(calc(-50% + 40px)) rotate(35deg)"
-              : "translateY(calc(-50% - 40px)) rotate(35deg)",
+            width: lineReach,
+            maskImage: `linear-gradient(to ${isLeft ? "right" : "left"}, transparent ${iconSize / 2}px, black ${iconSize / 2}px)`,
+            WebkitMaskImage: `linear-gradient(to ${isLeft ? "right" : "left"}, transparent ${iconSize / 2}px, black ${iconSize / 2}px)`,
           }}
-        >
-          <p>ALLOW A.I.</p>
-          <p>{label}</p>
+        />
+        <span
+          className="absolute h-2 w-2 rounded-full border border-[#1A1B1C]"
+          style={dotStyle}
+        />
+
+        <div className="absolute" style={textAnchorStyle}>
+          <div
+            className={`absolute top-0 text-sm font-normal whitespace-nowrap text-[#1A1B1C] ${
+              isLeft ? "left-0 text-left" : "right-0 text-right"
+            }`}
+            style={{
+              transform: isLeft
+                ? "translateY(calc(-50% + 40px)) rotate(35deg)"
+                : "translateY(calc(-50% - 40px)) rotate(35deg)",
+            }}
+          >
+            <p>ALLOW A.I.</p>
+            <p>{label}</p>
+          </div>
         </div>
-      </div>
-    </button>
+      </button>
+    </>
   );
 }
 
@@ -138,7 +178,7 @@ function CameraAuthPopup({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 8 }}
       transition={{ duration: 0.2, ease: "easeOut" }}
-      className="absolute top-1/2 left-full z-20 ml-12 w-125 translate-y-[-35%] bg-[#1A1B1C] text-[#FCFCFC]"
+      className="fixed top-1/2 left-6 right-6 z-20 -translate-y-1/2 bg-[#1A1B1C] text-[#FCFCFC] xl:absolute xl:left-full xl:right-auto xl:ml-12 xl:w-125 xl:translate-y-[-35%]"
     >
       <p className="px-8 pt-8 pb-10 text-sm font-semibold tracking-wide uppercase">
         Allow A.I. to access your camera
@@ -280,7 +320,7 @@ export default function SelfiePage() {
   }
 
   return (
-    <main className="relative flex min-h-[calc(100vh-4rem)] items-center justify-center gap-100 overflow-hidden px-8">
+    <main className="relative flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-8 overflow-hidden px-8 py-24 sm:gap-16 xl:flex-row xl:gap-100 xl:py-8">
       <p className="absolute top-0 left-8 text-sm font-semibold tracking-wide text-[#1A1B1C]">
         TO START ANALYSIS
       </p>

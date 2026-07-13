@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { CameraTips } from "../../components/phase-one/CameraTips";
 
@@ -71,13 +72,37 @@ export default function CameraCapture({
 
       {!ready && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-8 bg-white">
-          <div className="flex h-24 w-24 rotate-45 items-center justify-center border border-[#1A1B1C]">
+          <div className="relative h-191 w-191">
+            <motion.img
+              src="/Rectangle 2778 (1).svg"
+              alt=""
+              className="pointer-events-none absolute top-1/2 left-1/2 h-151 w-151 max-w-none -translate-x-1/2 -translate-y-1/2"
+              initial={{ rotate: 0 }}
+              animate={{ rotate: 360 }}
+              transition={{ duration: 36, repeat: Infinity, ease: "linear" }}
+            />
+            <motion.img
+              src="/Rectangle 2779 (1).svg"
+              alt=""
+              className="pointer-events-none absolute top-1/2 left-1/2 h-171 w-171 max-w-none -translate-x-1/2 -translate-y-1/2"
+              initial={{ rotate: 12 }}
+              animate={{ rotate: 372 }}
+              transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+            />
+            <motion.img
+              src="/Rectangle 2780.svg"
+              alt=""
+              className="pointer-events-none absolute top-1/2 left-1/2 h-191 w-191 max-w-none -translate-x-1/2 -translate-y-1/2"
+              initial={{ rotate: 20 }}
+              animate={{ rotate: 380 }}
+              transition={{ duration: 66, repeat: Infinity, ease: "linear" }}
+            />
             <Image
               src="/camera.svg"
               alt=""
-              width={40}
-              height={40}
-              className="-rotate-45"
+              width={136}
+              height={136}
+              className="absolute top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2"
             />
           </div>
           <p className="text-sm font-semibold tracking-wide text-[#1A1B1C]">
