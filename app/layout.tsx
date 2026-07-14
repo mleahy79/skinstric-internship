@@ -3,7 +3,6 @@ import "./globals.css";
 import localFont from 'next/font/local'
 import { Inter } from 'next/font/google'
 import Nav from "../components/Nav"
-import GridOverlay from "../components/dev/GridOverlay"
 
 
 const roobert = localFont({
@@ -44,7 +43,6 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <Nav />
         {children}
-        <GridOverlay />
       </body>
     </html>
   );
