@@ -119,12 +119,25 @@ export default function CameraCapture({
           </div>
           <button
             onClick={capture}
-            className="group absolute right-8 bottom-8 inline-flex cursor-pointer items-center gap-4 text-sm font-semibold text-white"
+            className="group absolute top-1/2 right-8 -translate-y-1/2 inline-flex cursor-pointer items-center gap-4 text-sm font-semibold text-white"
           >
             CAPTURE
-            <span className="relative flex h-7.5 w-7.5 items-center justify-center duration-300 group-hover:scale-105">
-              <span className="absolute inset-0 rotate-45 border border-solid border-white duration-300 group-hover:scale-110" />
-              <span className="h-0 w-0 border-y-[6px] border-l-8 border-y-transparent border-l-white duration-300 group-hover:scale-105" />
+            <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white duration-300 group-hover:scale-105">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8.5 5.5L9.5 4H14.5L15.5 5.5H18.5C19.6046 5.5 20.5 6.39543 20.5 7.5V17C20.5 18.1046 19.6046 19 18.5 19H5.5C4.39543 19 3.5 18.1046 3.5 17V7.5C3.5 6.39543 4.39543 5.5 5.5 5.5H8.5Z"
+                  stroke="#1A1B1C"
+                  strokeWidth="1.5"
+                  strokeLinejoin="round"
+                />
+                <circle cx="12" cy="12.5" r="3.5" stroke="#1A1B1C" strokeWidth="1.5" />
+              </svg>
             </span>
           </button>
         </>

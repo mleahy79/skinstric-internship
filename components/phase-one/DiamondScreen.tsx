@@ -6,22 +6,44 @@ import type { ReactNode } from "react";
 
 const DIAMOND_STEP = 80;
 
-export function BackButton({ onClick }: { onClick: () => void }) {
+export function BackButton({
+  onClick,
+  light,
+}: {
+  onClick: () => void;
+  light?: boolean;
+}) {
   return (
     <button
       onClick={onClick}
-      className="group absolute bottom-8 left-8 inline-flex cursor-pointer items-center gap-4 text-sm font-semibold text-[#1A1B1C]"
+      className={`group absolute bottom-8 left-8 inline-flex cursor-pointer items-center gap-4 text-sm font-semibold ${
+        light ? "text-white" : "text-[#1A1B1C]"
+      }`}
     >
       <span className="relative flex h-7.5 w-7.5 items-center justify-center duration-300 group-hover:scale-105">
-        <span className="absolute inset-0 rotate-45 border border-solid border-black duration-300 group-hover:scale-110" />
-        <span className="h-0 w-0 rotate-180 border-y-[6px] border-l-8 border-y-transparent border-l-black duration-300 group-hover:scale-105" />
+        <span
+          className={`absolute inset-0 rotate-45 border border-solid duration-300 group-hover:scale-110 ${
+            light ? "border-white" : "border-black"
+          }`}
+        />
+        <span
+          className={`h-0 w-0 rotate-180 border-y-[6px] border-l-8 border-y-transparent duration-300 group-hover:scale-105 ${
+            light ? "border-l-white" : "border-l-black"
+          }`}
+        />
       </span>
       <span className="hidden sm:inline">BACK</span>
     </button>
   );
 }
 
-export function ProceedButton({ onClick }: { onClick: () => void }) {
+export function ProceedButton({
+  onClick,
+  light,
+}: {
+  onClick: () => void;
+  light?: boolean;
+}) {
   return (
     <motion.button
       onClick={onClick}
@@ -29,12 +51,22 @@ export function ProceedButton({ onClick }: { onClick: () => void }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 10 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className="group absolute bottom-8 right-8 inline-flex cursor-pointer items-center gap-4 text-sm font-semibold text-[#1A1B1C]"
+      className={`group absolute bottom-8 right-8 inline-flex cursor-pointer items-center gap-4 text-sm font-semibold ${
+        light ? "text-white" : "text-[#1A1B1C]"
+      }`}
     >
       PROCEED
       <span className="relative flex h-7.5 w-7.5 items-center justify-center duration-300 group-hover:scale-105">
-        <span className="absolute inset-0 rotate-45 border border-solid border-black duration-300 group-hover:scale-110" />
-        <span className="h-0 w-0 border-y-[6px] border-l-8 border-y-transparent border-l-black duration-300 group-hover:scale-105" />
+        <span
+          className={`absolute inset-0 rotate-45 border border-solid duration-300 group-hover:scale-110 ${
+            light ? "border-white" : "border-black"
+          }`}
+        />
+        <span
+          className={`h-0 w-0 border-y-[6px] border-l-8 border-y-transparent duration-300 group-hover:scale-105 ${
+            light ? "border-l-white" : "border-l-black"
+          }`}
+        />
       </span>
     </motion.button>
   );

@@ -289,12 +289,13 @@ export default function SelfiePage() {
           <CameraTips light />
         </div>
         <BackButton
+          light
           onClick={() => {
             setImage(null);
             setStep("select");
           }}
         />
-        <ProceedButton onClick={submitPhaseTwo} />
+        <ProceedButton light onClick={submitPhaseTwo} />
       </main>
     );
   }
