@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Skinstric
+
+A pixel-accurate rebuild of the Skinstric product flow: a hero landing page, an onboarding
+questionnaire, a selfie capture/upload step, and an AI-generated skin demographics analysis
+screen. Built with Next.js (App Router), Tailwind CSS, Framer Motion, and Zustand.
+
+## Flow
+
+1. **Landing (`/`)** — hero screen with "Discover A.I." / "Take Test" entry points.
+2. **Onboarding** — name and location text steps, validated and persisted to `localStorage`
+   via a Zustand store, then submitted to the Phase One API.
+3. **Selfie (`/selfie`)** — capture a photo with the device camera or upload one from the
+   gallery.
+4. **Analysis (`/analysis`, `/analysis/demographics`)** — the photo is submitted to the Phase
+   Two API, which returns confidence-scored predictions (race, age, gender) that the user can
+   review and override.
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the app. Edit `app/page.tsx` to
+start changing the landing page — pages hot-reload as you edit.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` — start the dev server
+- `npm run build` — production build
+- `npm run start` — serve the production build
+- `npm run lint` — run ESLint
+- `npm test` — run the test suite once
+- `npm run test:watch` — run tests in watch mode
 
-## Learn More
+## Testing
 
-To learn more about Next.js, take a look at the following resources:
+Unit and component tests run on [Vitest](https://vitest.dev) + [React Testing
+Library](https://testing-library.com/react), with jsdom as the DOM environment. Config lives in
+[vitest.config.mts](vitest.config.mts) and [vitest.setup.ts](vitest.setup.ts). Test files sit
+next to the code they cover (`*.test.ts` / `*.test.tsx`):
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `store/onboarding.test.ts`, `store/analysis.test.ts` — Zustand store state transitions
+- `components/phase-one/TextStep.test.tsx` — name/location input validation and submit gating
+- `components/analysis/ProgressCircle.test.tsx` — percentage-to-arc rendering
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project Structure
 
-## Deploy on Vercel
+```
+app/
+  page.tsx                 landing / onboarding entry
+  selfie/                  camera capture + photo upload
+  analysis/                demographics results
+components/
+  phase-one/               onboarding UI (text steps, processing screen)
+  analysis/                results UI (progress circle, etc.)
+  Nav.tsx
+store/
+  onboarding.ts            name/location (persisted)
+  analysis.ts              photo + demographics results, user overrides
+fonts/                     self-hosted Roobert font
+public/                    SVG assets from Figma
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Backend
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The app talks to two external Firebase Cloud Functions (no local API routes):
+
+- **Phase One** — `POST` name/location to kick off analysis.
+- **Phase Two** — `POST` the captured/uploaded photo to get demographic predictions.
+
+Endpoint URLs are defined inline in [app/page.tsx](app/page.tsx) and
+[app/selfie/page.tsx](app/selfie/page.tsx).
+
+## Stack
+
+- [Next.js 16](https://nextjs.org) (App Router) — **note:** this repo pins a version with
+  breaking API/convention changes from what most training data assumes; check
+  `node_modules/next/dist/docs/` before relying on prior Next.js knowledge.
+- React 19, Tailwind CSS 4, Framer Motion, Zustand
