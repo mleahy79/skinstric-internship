@@ -45,6 +45,16 @@ next to the code they cover (`*.test.ts` / `*.test.tsx`):
 - `components/phase-one/TextStep.test.tsx` — name/location input validation and submit gating
 - `components/analysis/ProgressCircle.test.tsx` — percentage-to-arc rendering
 
+## Lighthouse
+
+Latest run against the deployed build: **Performance 99, Accessibility 96, Best Practices 100,
+SEO 100.**
+
+The one flagged item is a contrast warning on the `#A0A4AB` uppercase micro-labels (e.g. "Click
+to type", "To start analysis") against a white background. Left as-is deliberately — the color
+is a pixel-accurate match to the Figma spec, and darkening it to satisfy WCAG AA would break
+design fidelity for a label style that's decorative/secondary rather than primary content.
+
 ## Project Structure
 
 ```
