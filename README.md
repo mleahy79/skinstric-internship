@@ -1,8 +1,17 @@
 # Skinstric
 
-A pixel-accurate rebuild of the Skinstric product flow: a hero landing page, an onboarding
-questionnaire, a selfie capture/upload step, and an AI-generated skin demographics analysis
-screen. Built with Next.js (App Router), Tailwind CSS, Framer Motion, and Zustand.
+A pixel-accurate rebuild of the Skinstric product flow, from landing page to AI-generated skin
+demographics.
+
+![Skinstric demo — landing page through demographics analysis](docs/demo.gif)
+
+**Live:** <https://skinstric-internship-eight.vercel.app>
+
+**Stack:** Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS 4 · Framer Motion ·
+Zustand · Vitest
+
+A hero landing page, an onboarding questionnaire, a selfie capture/upload step, and an analysis
+screen that returns confidence-scored predictions the user can review and override.
 
 ## Flow
 
@@ -71,6 +80,7 @@ store/
   analysis.ts              photo + demographics results, user overrides
 fonts/                     self-hosted Roobert font
 public/                    SVG assets from Figma
+docs/                      README media
 ```
 
 ## Backend
@@ -82,10 +92,3 @@ The app talks to two external Firebase Cloud Functions (no local API routes):
 
 Endpoint URLs are defined inline in [app/page.tsx](app/page.tsx) and
 [app/selfie/page.tsx](app/selfie/page.tsx).
-
-## Stack
-
-- [Next.js 16](https://nextjs.org) (App Router) — **note:** this repo pins a version with
-  breaking API/convention changes from what most training data assumes; check
-  `node_modules/next/dist/docs/` before relying on prior Next.js knowledge.
-- React 19, Tailwind CSS 4, Framer Motion, Zustand
