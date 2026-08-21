@@ -1,5 +1,7 @@
 # Skinstric
 
+[![CI](https://github.com/mleahy79/skinstric-internship/actions/workflows/ci.yml/badge.svg)](https://github.com/mleahy79/skinstric-internship/actions/workflows/ci.yml)
+
 A pixel-accurate rebuild of the Skinstric product flow, from landing page to AI-generated skin
 demographics.
 
